@@ -7,6 +7,7 @@ class GoPro:
     URL = 'http://10.5.5.9/'
     IMAGE_PAGE = 'videos/DCIM/100GOPRO/'
     IMAGE_FORMAT = 'GOPR{:0>4}.JPG'
+    MOVIE_FORMAT = 'GOPR{:0>4}.MP4'
 
     _currentFile = 0;
 
@@ -43,8 +44,14 @@ class GoPro:
     def _lastImageURL(self):
         return GoPro.IMAGE_PAGE + self._lastImageName() 
 
+    def _lastMovieURL(self):
+        return GoPro.IMAGE_PAGE + self._lastMovieName()
+
     def _lastImageName(self):
         return GoPro.IMAGE_FORMAT.format(GoPro._currentFile)
+
+    def _lastMovieName(self):
+        return GoPro.MOVIE_FORMAT.format(GoPro._currentFile)
 
     def _findLastImage(self):
         GoPro._currentFile = 0
@@ -59,6 +66,13 @@ class GoPro:
             except (urllib2.HTTPError, urllib2.URLError), e:
                 pass
 
+            if error:
+                try:
+                    self._hit(self._lastMovieURL())
+                    error = False
+                except (urllib2.HTTPError, urllib2.URLError), e:
+                    pass
+
         error = False
         while not error:
             GoPro._currentFile += 1
@@ -67,5 +81,12 @@ class GoPro:
                 self._hit(self._lastImageURL())
             except (urllib2.HTTPError, urllib2.URLError), e:
                 error = True
+
+            if error:
+                try:
+                    self._hit(self._lastMovieURL())
+                    error = False
+                except (urllib2.HTTPError, urllib2.URLError), e:
+                    error = True
 
         GoPro._currentFile -= 1
