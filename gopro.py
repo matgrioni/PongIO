@@ -22,7 +22,10 @@ class GoPro:
 
     def getLastImage(self):
         cmd = self._lastImageURL()
-        self._download(cmd, str(GoPro._currentFile))
+        filename = self._lastImageName()
+        self._download(cmd, filename)
+
+        return filename
 
     def _cameraMode(self):
         cmd = 'camera/CM?t=' + GoPro.PASSWORD + '&p=%01'
@@ -38,7 +41,10 @@ class GoPro:
             img.write(response.read())
 
     def _lastImageURL(self):
-        return GoPro.IMAGE_PAGE + GoPro.IMAGE_FORMAT.format(GoPro._currentFile)
+        return GoPro.IMAGE_PAGE + self._lastImageName() 
+
+    def _lastImageName(self):
+        return GoPro.IMAGE_FORMAT.format(GoPro._currentFile)
 
     def _findLastImage(self):
         GoPro._currentFile = 0

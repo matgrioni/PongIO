@@ -1,5 +1,9 @@
 *.pyc
 images/*
 !images/.gitkeep
+
 haas/*
 !haas/.gitkeep
+
+template/*
+!template/.gitkeep
