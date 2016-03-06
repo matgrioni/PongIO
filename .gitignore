@@ -1,2 +1,5 @@
 *.pyc
-images/
+images/*
+!images/.gitkeep
+haas/*
+!haas/.gitkeep
